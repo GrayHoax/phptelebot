@@ -1,11 +1,12 @@
 {
-    "name": "radyakaze/phptelebot",
+    "name": "grayhoax/phptelebot",
     "type": "framework",
     "description": "Telegram bot framework written in PHP.",
     "keywords": ["bot", "telegram"],
     "license": "GPL-3.0",
     "authors": [
-        {"name": "Radya", "email": "radya@gmx.com"}
+        {"name": "Radya", "email": "radya@gmx.com"},
+        {"name": "GrayHoax", "email": "grayhoax@grayhoax.ru"}
     ],
     "require": {
         "php": ">=5.4",
