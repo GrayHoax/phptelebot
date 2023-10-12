@@ -63,8 +63,9 @@ class Bot
         }
 
         $ch = curl_init();
+        $telegram_api_server = (empty(getenv("TELEGRAM_SERVER_ENDPOINT")) ? 'https://api.telegram.org' : getenv("TELEGRAM_SERVER_ENDPOINT");
         $options = [
-            CURLOPT_URL => 'https://api.telegram.org/bot'.PHPTelebot::$token.'/'.$action,
+            CURLOPT_URL => $telegram_api_server . '/bot'.PHPTelebot::$token.'/'.$action,
             CURLOPT_POST => true,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYHOST => false,
