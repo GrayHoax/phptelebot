@@ -40,7 +40,7 @@ class Bot
 
             if (is_file($data[$field])) {
                 $upload = true;
-                $data[$field] = call_user_func('self::class::curlFile', $data[$field]);
+                $data[$field] = call_user_func(self::class . '::curlFile', $data[$field]);
             }
         }
 
@@ -133,7 +133,7 @@ class Bot
 
         $data['results'] = json_encode($results);
 
-        return call_user_func("self::class::send", 'answerInlineQuery', $data);
+        return call_user_func(self::class . '::send', 'answerInlineQuery', $data);
     }
 
     /**
@@ -153,7 +153,7 @@ class Bot
             $options['callback_query_id'] = $get['callback_query']['id'];
         }
 
-        return call_user_func("self::class::send", 'answerCallbackQuery', $options);
+        return call_user_func(self::class . '::send', 'answerCallbackQuery', $options);
     }
 
     /**
@@ -307,6 +307,6 @@ class Bot
             }
         }
 
-        return call_user_func('self::class::send', $action, $param);
+        return call_user_func(self::class . '::send', $action, $param);
     }
 }
