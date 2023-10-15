@@ -40,7 +40,7 @@ class Bot
 
             if (is_file($data[$field])) {
                 $upload = true;
-                $data[$field] = self::class::curlFile($data[$field]);
+                $data[$field] = call_user_func('self::class::curlFile', $data[$field]);
             }
         }
 
@@ -63,7 +63,7 @@ class Bot
         }
 
         $ch = curl_init();
-        $telegram_api_server = (empty(getenv("TELEGRAM_SERVER_ENDPOINT")) ? 'https://api.telegram.org' : getenv("TELEGRAM_SERVER_ENDPOINT");
+        $telegram_api_server = (empty(getenv("TELEGRAM_SERVER_ENDPOINT"))) ? 'https://api.telegram.org' : getenv("TELEGRAM_SERVER_ENDPOINT");
         $options = [
             CURLOPT_URL => $telegram_api_server . '/bot'.PHPTelebot::$token.'/'.$action,
             CURLOPT_POST => true,
@@ -91,9 +91,9 @@ class Bot
         curl_close($ch);
 
         if (PHPTelebot::$debug && $action != 'getUpdates') {
-            self::class::$debug .= 'Method: '.$action."\n";
-            self::class::$debug .= 'Data: '.str_replace("Array\n", '', print_r($data, true))."\n";
-            self::class::$debug .= 'Response: '.$result."\n";
+            //self::class::$debug .= 'Method: '.$action."\n";
+            //self::class::$debug .= 'Data: '.str_replace("Array\n", '', print_r($data, true))."\n";
+            //self::class::$debug .= 'Response: '.$result."\n";
         }
 
         $request_payload = json_decode($result);
@@ -103,12 +103,9 @@ class Bot
         
         if ($httpcode == 401) {
             throw new Exception('Incorect bot token');
-
-            return false;
         } else {
             if (!$request_payload->ok) {
                 throw new Exception($request_payload->description, $request_payload->error_code);
-                return false;
             } else {
                 return $result;
             }
@@ -136,7 +133,7 @@ class Bot
 
         $data['results'] = json_encode($results);
 
-        return self::class::send('answerInlineQuery', $data);
+        return call_user_func("self::class::send", 'answerInlineQuery', $data);
     }
 
     /**
@@ -156,7 +153,7 @@ class Bot
             $options['callback_query_id'] = $get['callback_query']['id'];
         }
 
-        return self::class::send('answerCallbackQuery', $options);
+        return call_user_func("self::class::send", 'answerCallbackQuery', $options);
     }
 
     /**
@@ -310,6 +307,6 @@ class Bot
             }
         }
 
-        return call_user_func_array('self::class::send', [$action, $param]);
+        return call_user_func('self::class::send', $action, $param);
     }
 }
