@@ -40,7 +40,7 @@ class Bot
 
             if (is_file($data[$field])) {
                 $upload = true;
-                $data[$field] = self::curlFile($data[$field]);
+                $data[$field] = self::class::curlFile($data[$field]);
             }
         }
 
@@ -91,9 +91,9 @@ class Bot
         curl_close($ch);
 
         if (PHPTelebot::$debug && $action != 'getUpdates') {
-            self::$debug .= 'Method: '.$action."\n";
-            self::$debug .= 'Data: '.str_replace("Array\n", '', print_r($data, true))."\n";
-            self::$debug .= 'Response: '.$result."\n";
+            self::class::$debug .= 'Method: '.$action."\n";
+            self::class::$debug .= 'Data: '.str_replace("Array\n", '', print_r($data, true))."\n";
+            self::class::$debug .= 'Response: '.$result."\n";
         }
 
         $request_payload = json_decode($result);
@@ -136,7 +136,7 @@ class Bot
 
         $data['results'] = json_encode($results);
 
-        return self::send('answerInlineQuery', $data);
+        return self::class::send('answerInlineQuery', $data);
     }
 
     /**
@@ -156,7 +156,7 @@ class Bot
             $options['callback_query_id'] = $get['callback_query']['id'];
         }
 
-        return self::send('answerCallbackQuery', $options);
+        return self::class::send('answerCallbackQuery', $options);
     }
 
     /**
@@ -310,6 +310,6 @@ class Bot
             }
         }
 
-        return call_user_func_array('self::send', [$action, $param]);
+        return call_user_func_array('self::class::send', [$action, $param]);
     }
 }
