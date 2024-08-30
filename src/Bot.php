@@ -146,7 +146,7 @@ class Bot
      */
     public static function answerCallbackQuery($text, $options = [])
     {
-        $options['text'] = $text;
+        if (!empty($text)) $options['text'] = $text;
 
         if (!isset($options['callback_query_id'])) {
             $get = PHPTelebot::$getUpdates;
