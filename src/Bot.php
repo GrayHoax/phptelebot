@@ -195,6 +195,8 @@ class Bot
             return $get['channel_post'];
         } elseif (isset($get['edited_channel_post'])) {
             return $get['edited_channel_post'];
+        } elseif (isset($get['my_chat_member'])) {
+            return $get['my_chat_member'];
         } else {
             return [];
         }
@@ -259,6 +261,8 @@ class Bot
             return 'channel';
         } elseif (isset($getUpdates['edited_channel_post'])) {
             return 'edited_channel';
+        } elseif (isset($getUpdates['my_chat_member'])) {
+            return 'my_chat_member';
         } else {
             return 'unknown';
         }
