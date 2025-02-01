@@ -263,6 +263,8 @@ class Bot
             return 'edited_channel';
         } elseif (isset($getUpdates['my_chat_member'])) {
             return 'my_chat_member';
+        } elseif (isset($getUpdates['edited_message'])) {
+            return 'edited_message';
         } else {
             return 'unknown';
         }
