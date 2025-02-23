@@ -197,6 +197,8 @@ class Bot
             return $get['edited_channel_post'];
         } elseif (isset($get['my_chat_member'])) {
             return $get['my_chat_member'];
+        } elseif (isset($get['pre_checkout_query'])) {
+            return $get['pre_checkout_query'];
         } else {
             return [];
         }
