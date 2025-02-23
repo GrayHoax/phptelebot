@@ -265,6 +265,8 @@ class Bot
             return 'my_chat_member';
         } elseif (isset($getUpdates['edited_message'])) {
             return 'edited_message';
+        } elseif (isset($getUpdates['pre_checkout_query'])) {
+            return 'pre_checkout_query';
         } else {
             return 'unknown';
         }
