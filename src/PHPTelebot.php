@@ -52,7 +52,7 @@ class PHPTelebot
      *
      * @var string
      */
-    protected static $version = '1.3';
+    protected static $version = '2.0';
 
     /**
      * PHPTelebot Constructor.
