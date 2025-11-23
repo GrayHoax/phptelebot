@@ -27,7 +27,7 @@ To install PHPTelebot with Composer, just add the following to your `composer.js
 ```json
 {
     "require": {
-        "GrayHoax/phptelebot": "*"
+        "grayhoax/phptelebot": "*"
     }
 }
 ```
@@ -35,7 +35,7 @@ To install PHPTelebot with Composer, just add the following to your `composer.js
 or by running the following command:
 
 ```shell
-composer require GrayHoax/phptelebot
+composer require grayhoax/phptelebot
 ```
 
 Composer installs autoloader at `./vendor/autoloader.php`. to include the library in your script, add:
