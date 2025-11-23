@@ -10,8 +10,13 @@
  * @license GPL-3.0
  */
 
+use PHPTelebot\Exceptions\ApiException;
+use PHPTelebot\Exceptions\TelebotException;
+
 /**
  * Class Bot.
+ *
+ * Static wrapper for Telegram Bot API methods
  */
 class Bot
 {
@@ -83,33 +88,65 @@ class Bot
         curl_setopt_array($ch, $options);
 
         $result = curl_exec($ch);
-
-        if (curl_errno($ch)) {
-            echo curl_error($ch)."\n";
-        }
+        $curlError = curl_error($ch);
+        $curlErrno = curl_errno($ch);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        if (PHPTelebot::$debug && $action != 'getUpdates') {
-            //self::class::$debug .= 'Method: '.$action."\n";
-            //self::class::$debug .= 'Data: '.str_replace("Array\n", '', print_r($data, true))."\n";
-            //self::class::$debug .= 'Response: '.$result."\n";
+        // Handle cURL errors
+        if ($curlErrno) {
+            throw new TelebotException(
+                'cURL Error: ' . $curlError,
+                $curlErrno,
+                ['action' => $action, 'curl_error' => $curlError]
+            );
         }
 
+        if (PHPTelebot::$debug && $action != 'getUpdates') {
+            self::$debug .= 'Method: '.$action."\n";
+            self::$debug .= 'HTTP Code: '.$httpcode."\n";
+            self::$debug .= 'Response: '.substr($result, 0, 500)."\n";
+        }
+
+        // Parse JSON response
         $request_payload = json_decode($result);
         if ($request_payload === null && json_last_error() !== JSON_ERROR_NONE) {
-            throw new Exception('Error while parsing json');
+            throw new TelebotException(
+                'Error while parsing JSON response from Telegram API',
+                json_last_error(),
+                [
+                    'action' => $action,
+                    'json_error' => json_last_error_msg(),
+                    'response' => substr($result, 0, 200)
+                ]
+            );
         }
-        
+
+        // Handle HTTP errors
         if ($httpcode == 401) {
-            throw new Exception('Incorect bot token');
-        } else {
-            if (!$request_payload->ok) {
-                throw new Exception($request_payload->description, $request_payload->error_code);
-            } else {
-                return $result;
-            }
+            throw new ApiException(
+                'Unauthorized: Incorrect bot token',
+                401,
+                'The bot token is invalid or expired',
+                ['action' => $action]
+            );
         }
+
+        // Handle API errors
+        if (!$request_payload->ok) {
+            $description = isset($request_payload->description) ? $request_payload->description : 'Unknown error';
+            $errorCode = isset($request_payload->error_code) ? $request_payload->error_code : 0;
+            $parameters = isset($request_payload->parameters) ? (array)$request_payload->parameters : [];
+
+            throw new ApiException(
+                'Telegram API Error: ' . $description,
+                $errorCode,
+                $description,
+                array_merge($parameters, ['action' => $action, 'data' => $data])
+            );
+        }
+
+        return $result;
     }
 
     /**

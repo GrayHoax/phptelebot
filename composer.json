@@ -1,8 +1,8 @@
 {
     "name": "grayhoax/phptelebot",
     "type": "framework",
-    "description": "Telegram bot framework written in PHP.",
-    "keywords": ["bot", "telegram"],
+    "description": "Telegram bot framework written in PHP with full Bot API 9.2 support.",
+    "keywords": ["bot", "telegram", "telegram-bot", "bot-api", "php-telegram"],
     "license": "GPL-3.0",
     "authors": [
         {"name": "Radya", "email": "radya@gmx.com"},
@@ -10,9 +10,27 @@
     ],
     "require": {
         "php": ">=5.4",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8|^5.0|^6.0|^7.0|^8.0|^9.0"
+    },
+    "suggest": {
+        "psr/log": "For PSR-3 compatible logging support",
+        "monolog/monolog": "For advanced logging features"
     },
     "autoload": {
+        "psr-4": {
+            "PHPTelebot\\": "src/"
+        },
         "files": ["src/PHPTelebot.php"]
-    }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PHPTelebot\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
