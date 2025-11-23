@@ -174,11 +174,100 @@ All notable changes to PHPTelebot will be documented in this file.
 - Support for chat join requests
 - Support for reactions and boosts
 
+### New Helpers & Developer Experience
+
+#### Exception Handling
+- **Custom Exception Hierarchy** - Professional error handling with context
+  - `TelebotException` - Base exception with context array support
+  - `ApiException` - Telegram API errors with detailed error descriptions
+  - `ValidationException` - Parameter validation errors with field information
+  - `WebhookException` - Webhook validation failures
+- Enhanced error messages in `Bot::send()` with specific exception types for cURL errors, JSON parsing, HTTP 401, and API errors
+
+#### KeyboardBuilder Helper (`PHPTelebot\Helpers\KeyboardBuilder`)
+- Fluent interface for building inline and reply keyboards
+- **Inline keyboard methods:**
+  - `addButton()` - Callback data buttons
+  - `addUrlButton()` - URL buttons
+  - `addWebAppButton()` - Web App buttons
+  - `addLoginButton()` - Login buttons with auth options
+  - `addSwitchInlineButton()` - Switch to inline mode buttons
+- **Reply keyboard methods:**
+  - `addTextButton()` - Simple text buttons
+  - `addRequestContactButton()` - Request user's contact
+  - `addRequestLocationButton()` - Request user's location
+  - `addRequestPollButton()` - Request poll creation
+  - `addWebAppButton()` - Web App button in reply keyboard
+- **Keyboard modifiers:**
+  - `oneTime()` - Hide keyboard after use
+  - `resize()` - Resize keyboard vertically
+  - `selective()` - Show to specific users only
+  - `inputFieldPlaceholder()` - Set placeholder text
+- **Static helpers:**
+  - `KeyboardBuilder::remove()` - Remove keyboard
+  - `KeyboardBuilder::forceReply()` - Force user to reply
+
+#### WebAppHandler Helper (`PHPTelebot\Helpers\WebAppHandler`)
+- **Web App Data Validation** - Secure HMAC-SHA256 validation of Web App init data
+- Methods:
+  - `validate($initData)` - Validate Web App data authenticity
+  - `parse($initData)` - Parse and decode Web App data
+  - `getUser($initData)` - Extract user information
+  - `getChat($initData)` - Extract chat information
+  - `extractFromMessage($message)` - Static helper to extract data from messages
+  - `createButton($text, $url)` - Static helper to create Web App buttons
+
+#### MediaGroupHandler Helper (`PHPTelebot\Helpers\MediaGroupHandler`)
+- **Fluent Interface for Albums** - Easy media group (album) creation and sending
+- Methods:
+  - `addPhoto($media, $options)` - Add photo to album
+  - `addVideo($media, $options)` - Add video to album
+  - `addDocument($media, $options)` - Add document to album
+  - `addAudio($media, $options)` - Add audio to album
+  - `build()` - Get media group array
+  - `send($chatId, $options)` - Build and send in one call
+  - `count()` - Get current media count
+  - `clear()` - Clear all media
+- Static helpers:
+  - `MediaGroupHandler::create()` - Create new instance
+  - `MediaGroupHandler::fromFiles($files)` - Create from file array
+- Automatic validation (1-10 items per Telegram API limit)
+
+#### WebhookValidator Helper (`PHPTelebot\Helpers\WebhookValidator`)
+- **Comprehensive Webhook Security** - Multi-layer validation for webhook requests
+- Validation checks:
+  - HTTP method validation (POST only)
+  - Content-Type validation (application/json)
+  - IP address validation against Telegram server ranges
+  - Secret token validation (X-Telegram-Bot-Api-Secret-Token header)
+- IP ranges validated: `149.154.160.0/20` and `91.108.4.0/22`
+- Methods:
+  - `validate()` - Run all validations
+  - `validateMethod()` - Check HTTP method
+  - `validateContentType()` - Check content type
+  - `validateIp()` - Check source IP
+  - `validateSecretToken()` - Verify secret token
+
+#### Examples & Documentation
+- **New `/examples` directory** with production-ready bot examples:
+  - `keyboard_builder_example.php` - 10 keyboard examples (inline, reply, URL, Web App, grid, etc.)
+  - `webapp_bot.php` - Complete Web App integration with data validation
+  - `group_management_bot.php` - Full-featured group management bot with admin commands
+  - `mediagroup_example.php` - 7 media group examples (albums, mixed media, documents)
+- **Comprehensive examples README** - Usage instructions, prerequisites, and code snippets
+- All examples demonstrate best practices with error handling and proper validation
+
 ### Changed
 - Updated framework version to 2.0.0
 - Improved Bot::send() to support new media upload types (sendAnimation, sendVideoNote)
 - Extended $needChatId array with new methods requiring chat_id
 - Enhanced Bot::__callStatic() with comprehensive parameter mapping for 50+ new methods
+- **composer.json updates:**
+  - Added PSR-4 autoloading for `PHPTelebot\` namespace
+  - Added `ext-json` requirement
+  - Added PHPUnit to require-dev
+  - Added suggest section for `psr/log` and `monolog/monolog`
+  - Updated package description and keywords
 
 ### Technical Improvements
 - Support for `message_thread_id` parameter (forum topics)
