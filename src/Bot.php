@@ -68,7 +68,11 @@ class Bot
         }
 
         $ch = curl_init();
-        $telegram_api_server = (empty(getenv("TELEGRAM_SERVER_ENDPOINT"))) ? 'https://api.telegram.org' : getenv("TELEGRAM_SERVER_ENDPOINT");
+        // getenv() fails in PHP-FPM with clear_env=yes (Docker default); fall back to $_ENV/$_SERVER
+        $telegram_api_server = getenv('TELEGRAM_SERVER_ENDPOINT')
+            ?: ($_ENV['TELEGRAM_SERVER_ENDPOINT'] ?? null)
+            ?: ($_SERVER['TELEGRAM_SERVER_ENDPOINT'] ?? null)
+            ?: 'https://api.telegram.org';
         $options = [
             CURLOPT_URL => $telegram_api_server . '/bot'.PHPTelebot::$token.'/'.$action,
             CURLOPT_POST => true,

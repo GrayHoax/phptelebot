@@ -1,2 +1,74 @@
+# Dependencies
+/vendor/
+
+# Composer
+composer.phar
+composer.lock
+
+# Environment and local configuration
+.env
+.env.*
+!.env.example
+!.env.dist
+*.local
+config.local.php
+
+# PHPUnit
+.phpunit.result.cache
+.phpunit.cache/
+/coverage/
+/build/coverage/
+/tests/_output/
+
+# Static analysis and code quality caches
+.php-cs-fixer.cache
+.php_cs.cache
+.phpstan/
+.psalm/
+.phan/
+.cache/
+
+# Logs and runtime files
+*.log
+logs/
+log/
+runtime/
+tmp/
+temp/
+cache/
+
+# Generated documentation and reports
+/build/
+/reports/
+/docs/_build/
+
+# PHP package archives
+*.phar
+*.tar
+*.tar.gz
+*.zip
+
+# IDEs and editors
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Local test and scratch files
 test.php
-.vscode
+debug.php
+scratch.php
+playground.php
